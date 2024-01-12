@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hotel Check-In Form</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Hotel Check-In</h1>
+  <form id="check-in-form" action="/check-in" method="post">
+    <label for="client-firstname">First Name:</label>
+    <input type="text" id="client-firstname" name="client-firstname" required />
+
+    <label for="client-lastname">Last Name:</label>
+    <input type="text" id="client-lastname" name="client-lastname" required />
+
+    <label for="client-email">Email:</label>
+    <input type="email" id="client-email" name="client-email" required />
+
+    <label for="client-phone">Phone:</label>
+    <input type="tel" id="client-phone" name="client-phone" required />
+
+    <label for="check-in-date">Check-In Date:</label>
+    <input type="date" id="check-in-date" name="check-in-date" required />
+
+    <label for="check-out-date">Check-Out Date:</label>
+    <input type="date" id="check-out-date" name="check-out-date" required />
+    
+    <label for="card-number">Card Number:</label>
+    <input type="text" id="card-number" name="card-number" required />
+    
+    <label for="exp-month">Expiration Month:</label>
+    <input type="text" id="exp-month" name="exp-month" placeholder="MM" required />
+    
+    <label for="exp-year">Expiration Year:</label>
+    <input type="text" id="exp-year" name="exp-year" placeholder="YYYY" required />
+    
+    <label for="cvc">CVV:</label>
+    <input type="text" id="cvc" name="cvc" required />
+
+    <button type="submit">Check In</button>
+  </form>
+  <script type="module" src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js"></script>
+  <script type="module" src="index.js"></script>
+</body>
+</html>

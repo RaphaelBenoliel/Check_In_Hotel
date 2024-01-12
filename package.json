@@ -1,0 +1,27 @@
+{
+  "name": "check_in_hotel",
+  "version": "1.0.0",
+  "description": "check in form page for smart hotel ",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RaphaelBenoliel/Check_In_Hotel.git"
+  },
+  "author": "Raphael Benoliel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RaphaelBenoliel/Check_In_Hotel/issues"
+  },
+  "homepage": "https://github.com/RaphaelBenoliel/Check_In_Hotel#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "firebase": "^10.7.1",
+    "nodemon": "^3.0.2"
+  }
+}

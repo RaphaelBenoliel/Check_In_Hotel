@@ -50,3 +50,16 @@ body {
     background-color: #555;
   }
   
+  #error-container {
+    display: none;
+    background-color: #f44336;
+    color: white;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+/* Style for individual error messages */
+.error-message {
+    margin-bottom: 5px;
+}

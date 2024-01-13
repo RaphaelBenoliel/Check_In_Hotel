@@ -42,6 +42,22 @@ app.post('/check-in', (req, res) => {
         'exp-year': expYear,
         'cvc': cvc,
     } = req.body;
+     // Validate inputs
+     const errors = {};
+     if (!isValidCardNumber(cardNumber)) {
+         errors['card-number'] = 'Invalid card number. It must be a 16-digit number.';
+     }
+     if (!isValidExpirationDate(expMonth, expYear)) {
+         errors['exp-month'] = 'Invalid expiration month.';
+         errors['exp-year'] = 'Invalid expiration year.';
+     }
+     if (!isValidCVC(cvc)) {
+         errors['cvc'] = 'Invalid CVC. It must be a 3 or 4-digit number.';
+     }
+ 
+     if (Object.keys(errors).length > 0) {
+        return res.status(400).json({ errors });
+    }
 
     // Save data to Firebase Realtime Database
     const checkInsRef = ref(database, "check-ins");
@@ -59,23 +75,39 @@ app.post('/check-in', (req, res) => {
         cvc: cvc,
     });
 
-    res.send("Check-in successful!");
+    // Send success response
+    res.status(200).json({ success: true, message: 'Check-in successful!' });
 });
+function isValidCardNumber(cardNumber) {
+    // Validate card number (16 digits)
+    return /^\d{16}$/.test(cardNumber);
+}
 
+function isValidExpirationDate(expMonth, expYear) {
+    // Validate expiration date (MM and YYYY format)
+    const currentYear = new Date().getFullYear();
+    const isValidMonth = /^\d{1,2}$/.test(expMonth) && parseInt(expMonth, 10) >= 1 && parseInt(expMonth, 10) <= 12;
+    const isValidYear = /^\d{4}$/.test(expYear) && parseInt(expYear, 10) >= currentYear;
+
+    return isValidMonth && isValidYear;
+}
+
+function isValidCVC(cvc) {
+    // Validate CVC (3 or 4 digits)
+    return /^\d{3,4}$/.test(cvc);
+}
 const __filename = new URL(import.meta.url).pathname;
 const __dirname = path.dirname(__filename);
 
 app.get('/', (req, res) => {
     const filePath = path.join(__dirname, 'checkin.html');
     const decodedPath = decodeURIComponent(filePath);
-    console.log('File Path:', decodedPath);
     res.sendFile(decodedPath);
 });
 
 app.get('/style.css', (req, res) => {
     const filePath = path.join(__dirname, 'style.css');
     const decodedPath = decodeURIComponent(filePath);
-    console.log('File Path:', decodedPath);
     res.sendFile(decodedPath);
 });
 

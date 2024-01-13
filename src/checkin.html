@@ -6,6 +6,9 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+    <div id="success-container" style="display: none; background-color: #4CAF50; color: white; padding: 10px; text-align: center; margin-bottom: 10px; border-radius: 5px;">
+        <p id="success-message"></p>
+    </div>
   <h1>Hotel Check-In</h1>
   <form id="check-in-form" action="/check-in" method="post">
     <label for="client-firstname">First Name:</label>
@@ -28,20 +31,113 @@
     
     <label for="card-number">Card Number:</label>
     <input type="text" id="card-number" name="card-number" required />
-    
+
     <label for="exp-month">Expiration Month:</label>
     <input type="text" id="exp-month" name="exp-month" placeholder="MM" required />
-    
+
     <label for="exp-year">Expiration Year:</label>
     <input type="text" id="exp-year" name="exp-year" placeholder="YYYY" required />
-    
+
     <label for="cvc">CVV:</label>
     <input type="text" id="cvc" name="cvc" required />
-
+    <div id="error-container">
+        <p><strong>Validation Errors:</strong></p>
+        <ul id="error-list"></ul>
+    </div>
     <button type="submit">Check In</button>
   </form>
   <script type="module" src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
   <script type="module" src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js"></script>
   <script type="module" src="index.js"></script>
+  <script>
+    document.getElementById('check-in-form').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    // Hide any previous messages
+    hideErrorContainer();
+    hideSuccessContainer();
+
+    const formData = new FormData(this);
+
+    try {
+        const response = await fetch('/check-in', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams(formData).toString(),
+        });
+
+        if (response.ok) {
+            const { message } = await response.json();
+            displaySuccessMessage(message);
+            // Hide the form on success
+            document.getElementById('check-in-form').style.display = 'none';
+        } else if (response.status === 400) {
+            const { errors } = await response.json();
+            displayValidationErrors(errors);
+        } else {
+            console.error('Unexpected server error:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Failed to send check-in request:', error);
+    }
+});
+
+// Helper function to display success message
+function displaySuccessMessage(message) {
+    const successContainer = document.getElementById('success-container');
+    const successMessage = document.getElementById('success-message');
+    successMessage.textContent = message;
+    successContainer.style.display = 'block';
+}
+
+// Helper function to hide the success container
+function hideSuccessContainer() {
+    const successContainer = document.getElementById('success-container');
+    successContainer.style.display = 'none';
+}
+
+    // Helper function to display validation errors
+    function displayValidationErrors(errors) {
+    const errorContainer = document.getElementById('error-container');
+    const errorList = document.getElementById('error-list');
+
+    // Clear previous error messages
+    errorList.innerHTML = '';
+
+    if (errors && Object.keys(errors).length > 0) {
+        // If errors is an object with keys, treat it as individual field errors
+        Object.keys(errors).forEach((fieldName) => {
+            const errorMessage = document.createElement('li');
+            errorMessage.textContent = errors[fieldName];
+            errorMessage.className = 'error-message';
+            errorList.appendChild(errorMessage);
+        });
+
+        errorContainer.style.display = 'block';
+    } else if (Array.isArray(errors)) {
+        // If errors is an array, treat it as general errors
+        errors.forEach((error) => {
+            const errorMessage = document.createElement('li');
+            errorMessage.textContent = error;
+            errorMessage.className = 'error-message';
+            errorList.appendChild(errorMessage);
+        });
+
+        errorContainer.style.display = 'block';
+    } else {
+        console.error('Unexpected error format:', errors);
+    }
+}
+
+    // Helper function to hide the error container
+    function hideErrorContainer() {
+        const errorContainer = document.getElementById('error-container');
+        const errorList = document.getElementById('error-list');
+        errorList.innerHTML = ''; // Clear previous error messages
+        errorContainer.style.display = 'none';
+    }
+</script>
 </body>
 </html>

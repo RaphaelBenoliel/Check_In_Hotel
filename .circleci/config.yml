@@ -17,7 +17,7 @@ jobs:
           command: npm install
       - run: 
           name: CD - Deploy the service
-          command: curl ""
+          command: curl "https://api.render.com/deploy/srv-cmkjaqev3ddc73c7kap0?key=xqb2lmIS91s"
 
 workflows:
   example-workflow:

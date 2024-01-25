@@ -2,7 +2,8 @@ import express from 'express';
 import path from 'path';
 import bodyParser from 'body-parser';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, push, set } from 'firebase/database';
+import { getDatabase, ref, push, set ,get,child} from 'firebase/database';
+import nodemailer from 'nodemailer';
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -27,9 +28,16 @@ const database = getDatabase(appd);
 
 // Set up middleware to parse form data
 app.use(express.urlencoded({ extended: true }));
-
+// Set up Nodemailer transporter
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'shs.smarthotel@gmail.com',
+      pass: 'cogr wqtj uipe ipwg', 
+    },
+  });
 // Handle form submission
-app.post('/check-in', (req, res) => {
+app.post('/check-in', async (req, res) => {
     const {
         'client-firstname': clientFirstName,
         'client-lastname': clientLastName,
@@ -54,13 +62,29 @@ app.post('/check-in', (req, res) => {
      if (!isValidCVC(cvc)) {
          errors['cvc'] = 'Invalid CVC. It must be a 3 or 4-digit number.';
      }
- 
+     // Save data to Firebase Realtime Database
+    const checkInsRef = ref(database, "check-ins");
+    const emailExistsSnapshot = await get(checkInsRef);
+    let emailExists = false;
+    if (emailExistsSnapshot.exists()) {
+        // Loop through each child and check if the email exists
+        emailExistsSnapshot.forEach((childSnapshot) => {
+            const childData = childSnapshot.val();
+            if (childData.email === clientEmail) {
+                emailExists = true;
+            }
+        });
+    }
+    if (emailExists) {
+         errors['client-email'] = 'Email already exists. Cannot check in.';
+    }
      if (Object.keys(errors).length > 0) {
         return res.status(400).json({ errors });
     }
-
-    // Save data to Firebase Realtime Database
-    const checkInsRef = ref(database, "check-ins");
+    // Generate a random 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    
     const newCheckInRef = push(checkInsRef);
     set(newCheckInRef, {
         firstname: clientFirstName,
@@ -73,11 +97,30 @@ app.post('/check-in', (req, res) => {
         expMonth: expMonth,
         expYear: expYear,
         cvc: cvc,
+        otp: otp,
     });
 
+  // Send email with success message and OTP
+  const mailOptions = {
+    from: 'shs.smarthotel@gmail.com', // replace with your Gmail address
+    to: clientEmail,
+    subject: 'Check-In Successful',
+    html: `
+      <p>Your check-in was successful!</p>
+      <p>One-Time Password (OTP): <strong>${otp}</strong></p>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Email sent successfully');
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
     // Send success response
     res.status(200).json({ success: true, message: 'Check-in successful!' });
 });
+
 function isValidCardNumber(cardNumber) {
     // Validate card number (16 digits)
     return /^\d{16}$/.test(cardNumber);

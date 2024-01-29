@@ -63,7 +63,7 @@ app.post('/check-in', async (req, res) => {
          errors['cvc'] = 'Invalid CVC. It must be a 3 or 4-digit number.';
      }
      // Save data to Firebase Realtime Database
-    const checkInsRef = ref(database, "check-ins");
+    const checkInsRef = ref(database, "guests");
     const emailExistsSnapshot = await get(checkInsRef);
     let emailExists = false;
     if (emailExistsSnapshot.exists()) {

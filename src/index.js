@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// TODO: Replace the following with your app's Firebase project configuration
+// Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBoDKauyiDVKCTMcu8w6fyinvvKlUjEzH4",
     authDomain: "smarthotel-a2786.firebaseapp.com",
@@ -102,7 +102,7 @@ app.post('/check-in', async (req, res) => {
 
   // Send email with success message and OTP
   const mailOptions = {
-    from: 'shs.smarthotel@gmail.com', // replace with your Gmail address
+    from: 'shs.smarthotel@gmail.com', 
     to: clientEmail,
     subject: 'Check-In Successful',
     html: `

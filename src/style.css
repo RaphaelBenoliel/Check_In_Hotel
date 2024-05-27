@@ -1,65 +1,145 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
-  }
-  
-  h1 {
-    text-align: center;
-    color: #333;
-  }
-  
-  form {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 35px;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 5px;
-    color: #333;
-  }
-  
-  input[type="text"],
-  input[type="email"],
-  input[type="tel"],
-  input[type="date"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  button[type="submit"] {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background-color: #025ec2;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  button[type="submit"]:hover {
-    background-color: #555;
-  }
-  
-  #error-container {
-    display: none;
-    background-color: #f44336;
-    color: white;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 5px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background-color: #3c3333eb;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
-/* Style for individual error messages */
+.container {
+  width: 100%;
+  max-width: 500px; /* Adjusted max-width */
+  padding: 12px; /* Reduced padding */
+  background-color: #393838b9;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+  color: #ffffff;
+  font-size: 1.6em; /* Reduced font size */
+  margin-bottom: 10px; /* Reduced margin */
+}
+
+form {
+  text-align: left;
+}
+
+.form-group {
+  margin-bottom: 10px; /* Reduced margin */
+}
+
+label {
+  display: block;
+  margin-bottom: 3px; /* Reduced margin */
+  color: #e2e2e2;
+  font-weight: bold;
+  font-size: 12px; /* Reduced font size */
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+input[type="password"] {
+  width: calc(100% - 20px); /* Adjusted width based on reduced padding */
+  padding: 8px; /* Reduced padding */
+  margin-bottom: 8px; /* Reduced margin */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #fafafa;
+  font-size: 14px; /* Reduced font size */
+  color: #333;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="date"]:focus,
+input[type="password"]:focus {
+  border-color: #FF6B3C;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+}
+
+button[type="submit"] {
+  margin-top: 15px; /* Reduced margin */
+  width: 100%;
+  padding: 10px; /* Reduced padding */
+  background-color: #FF6B3C;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px; /* Reduced font size */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #ff693c8a;
+  box-shadow: 0 8px 16px rgba(237, 119, 1, 0.25);
+}
+
+#error-container {
+  display: none;
+  background-color: #ffcccc;
+  color: rgb(199, 61, 61);
+  padding: 10px; /* Reduced padding */
+  margin-top: 8px; /* Reduced margin */
+  border-radius: 5px;
+  font-size: 12px; /* Reduced font size */
+}
+
+
+#error-container p {
+  margin: 0;
+  font-weight: bold;
+}
+
+#error-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 6px 0 0 0; /* Reduced margin */
+}
+
 .error-message {
-    margin-bottom: 5px;
+  margin-bottom: 6px; /* Reduced margin */
+}
+
+#success-container {
+  display: none;
+  background-color: #4CAF50;
+  color: white;
+  padding: 8px; /* Reduced padding */
+  text-align: center;
+  margin-bottom: 15px; /* Reduced margin */
+  border-radius: 5px;
+  font-size: 14px; /* Reduced font size */
+}
+
+input::placeholder {
+  color: #7e7a7a;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 10px; /* Further reduced padding */
+  }
+
+  h1 {
+    font-size: 1.9em; /* Further reduced font size */
+  }
+
+  button[type="submit"] {
+    font-size: 14px; /* Further reduced font size */
+  }
 }

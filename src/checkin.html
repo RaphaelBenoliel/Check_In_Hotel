@@ -6,138 +6,152 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div id="success-container" style="display: none; background-color: #4CAF50; color: white; padding: 10px; text-align: center; margin-bottom: 10px; border-radius: 5px;">
-        <p id="success-message"></p>
+  <div class="container">
+    <div id="success-container">
+      <p id="success-message"></p>
     </div>
-  <h1>Hotel Check-In</h1>
-  <form id="check-in-form" action="/check-in" method="post">
-    <label for="client-firstname">First Name:</label>
-    <input type="text" id="client-firstname" name="client-firstname" required />
-
-    <label for="client-lastname">Last Name:</label>
-    <input type="text" id="client-lastname" name="client-lastname" required />
-
-    <label for="client-email">Email:</label>
-    <input type="email" id="client-email" name="client-email" required />
-
-    <label for="client-phone">Phone:</label>
-    <input type="tel" id="client-phone" name="client-phone" required />
-
-    <label for="check-in-date">Check-In Date:</label>
-    <input type="date" id="check-in-date" name="check-in-date" required />
-
-    <label for="check-out-date">Check-Out Date:</label>
-    <input type="date" id="check-out-date" name="check-out-date" required />
-    
-    <label for="card-number">Card Number:</label>
-    <input type="text" id="card-number" name="card-number" required />
-
-    <label for="exp-month">Expiration Month:</label>
-    <input type="text" id="exp-month" name="exp-month" placeholder="MM" required />
-
-    <label for="exp-year">Expiration Year:</label>
-    <input type="text" id="exp-year" name="exp-year" placeholder="YYYY" required />
-
-    <label for="cvc">CVV:</label>
-    <input type="text" id="cvc" name="cvc" required />
-    <div id="error-container">
+    <h1>Hotel Check in</h1>
+    <form id="check-in-form" action="/check-in" method="post">
+      <div class="form-group">
+        <label for="client-firstname">First Name:</label>
+        <input type="text" id="client-firstname" name="client-firstname" required />
+      </div>
+      <div class="form-group">
+        <label for="client-lastname">Last Name:</label>
+        <input type="text" id="client-lastname" name="client-lastname" required />
+      </div>
+      <div class="form-group">
+        <label for="client-email">Email:</label>
+        <input type="email" id="client-email" name="client-email" required />
+      </div>
+      <div class="form-group">
+        <label for="client-phone">Phone:</label>
+        <input type="tel" id="client-phone" name="client-phone" required />
+      </div>
+      <div class="form-group">
+        <label for="check-in-date">Check-In Date:</label>
+        <input type="date" id="check-in-date" name="check-in-date" required />
+      </div>
+      <div class="form-group">
+        <label for="check-out-date">Check-Out Date:</label>
+        <input type="date" id="check-out-date" name="check-out-date" required />
+      </div>
+      <div class="form-group">
+        <label for="card-number">Card Number:</label>
+        <input type="text" id="card-number" name="card-number" required />
+      </div>
+      <div class="form-group">
+        <label for="exp-month">Expiration Month:</label>
+        <input type="text" id="exp-month" name="exp-month" placeholder="MM" required />
+      </div>
+      <div class="form-group">
+        <label for="exp-year">Expiration Year:</label>
+        <input type="text" id="exp-year" name="exp-year" placeholder="YYYY" required />
+      </div>
+      <div class="form-group">
+        <label for="cvc">CVV:</label>
+        <input type="text" id="cvc" name="cvc" required />
+      </div>
+      <div id="error-container">
         <p><strong>Validation Errors:</strong></p>
         <ul id="error-list"></ul>
-    </div>
-    <button type="submit">Check In</button>
-  </form>
+      </div>
+      <button type="submit">Check In</button>
+    </form>
+  </div>
+
   <script type="module" src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
   <script type="module" src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js"></script>
   <script type="module" src="index.js"></script>
   <script>
     document.getElementById('check-in-form').addEventListener('submit', async function (event) {
-    event.preventDefault();
+      event.preventDefault();
 
-    // Hide any previous messages
-    hideErrorContainer();
-    hideSuccessContainer();
+      // Hide any previous messages
+      hideErrorContainer();
+      hideSuccessContainer();
 
-    const formData = new FormData(this);
+      const formData = new FormData(this);
 
-    try {
+      try {
         const response = await fetch('/check-in', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams(formData).toString(),
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams(formData).toString(),
         });
 
         if (response.ok) {
-            const { message } = await response.json();
-            displaySuccessMessage(message);
-            // Hide the form on success
-            document.getElementById('check-in-form').style.display = 'none';
+          const { message } = await response.json();
+          displaySuccessMessage(message);
+          // Hide the form on success
+          document.getElementById('check-in-form').style.display = 'none';
         } else if (response.status === 400) {
-            const { errors } = await response.json();
-            displayValidationErrors(errors);
+          const { errors } = await response.json();
+          displayValidationErrors(errors);
         } else {
-            console.error('Unexpected server error:', response.statusText);
+          console.error('Unexpected server error:', response.statusText);
         }
-    } catch (error) {
+      } catch (error) {
         console.error('Failed to send check-in request:', error);
+      }
+    });
+
+    // Helper function to display success message
+    function displaySuccessMessage(message) {
+      const successContainer = document.getElementById('success-container');
+      const successMessage = document.getElementById('success-message');
+      successMessage.textContent = message;
+      successContainer.style.display = 'block';
     }
-});
 
-// Helper function to display success message
-function displaySuccessMessage(message) {
-    const successContainer = document.getElementById('success-container');
-    const successMessage = document.getElementById('success-message');
-    successMessage.textContent = message;
-    successContainer.style.display = 'block';
-}
-
-// Helper function to hide the success container
-function hideSuccessContainer() {
-    const successContainer = document.getElementById('success-container');
-    successContainer.style.display = 'none';
-}
+    // Helper function to hide the success container
+    function hideSuccessContainer() {
+      const successContainer = document.getElementById('success-container');
+      successContainer.style.display = 'none';
+    }
 
     // Helper function to display validation errors
     function displayValidationErrors(errors) {
-    const errorContainer = document.getElementById('error-container');
-    const errorList = document.getElementById('error-list');
+      const errorContainer = document.getElementById('error-container');
+      const errorList = document.getElementById('error-list');
 
-    // Clear previous error messages
-    errorList.innerHTML = '';
+      // Clear previous error messages
+      errorList.innerHTML = '';
 
-    if (errors && Object.keys(errors).length > 0) {
+      if (errors && Object.keys(errors).length > 0) {
         // If errors is an object with keys, treat it as individual field errors
         Object.keys(errors).forEach((fieldName) => {
-            const errorMessage = document.createElement('li');
-            errorMessage.textContent = errors[fieldName];
-            errorMessage.className = 'error-message';
-            errorList.appendChild(errorMessage);
+          const errorMessage = document.createElement('li');
+          errorMessage.textContent = errors[fieldName];
+          errorMessage.className = 'error-message';
+          errorList.appendChild(errorMessage);
         });
 
         errorContainer.style.display = 'block';
-    } else if (Array.isArray(errors)) {
+      } else if (Array.isArray(errors)) {
         // If errors is an array, treat it as general errors
         errors.forEach((error) => {
-            const errorMessage = document.createElement('li');
-            errorMessage.textContent = error;
-            errorMessage.className = 'error-message';
-            errorList.appendChild(errorMessage);
+          const errorMessage = document.createElement('li');
+          errorMessage.textContent = error;
+          errorMessage.className = 'error-message';
+          errorList.appendChild(errorMessage);
         });
 
         errorContainer.style.display = 'block';
-    } else {
+      } else {
         console.error('Unexpected error format:', errors);
+      }
     }
-}
 
     // Helper function to hide the error container
     function hideErrorContainer() {
-        const errorContainer = document.getElementById('error-container');
-        const errorList = document.getElementById('error-list');
-        errorList.innerHTML = ''; // Clear previous error messages
-        errorContainer.style.display = 'none';
+      const errorContainer = document.getElementById('error-container');
+      const errorList = document.getElementById('error-list');
+      errorList.innerHTML = ''; // Clear previous error messages
+      errorContainer.style.display = 'none';
     }
-</script>
+  </script>
 </body>
 </html>

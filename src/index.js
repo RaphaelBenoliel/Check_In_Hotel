@@ -104,7 +104,7 @@ app.post('/check-in', async (req, res) => {
   const mailOptions = {
     from: 'shs.smarthotel@gmail.com', 
     to: clientEmail,
-    subject: 'Check-In Successful',
+    subject: 'SHS Check-In Successful',
     html: `
       <p>Your check-in was successful!</p>
       <p>One-Time Password (OTP): <strong>${otp}</strong></p>

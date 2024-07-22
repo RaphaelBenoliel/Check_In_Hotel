@@ -102,15 +102,27 @@ app.post('/check-in', async (req, res) => {
 
   // Send email with success message and OTP
   const mailOptions = {
-    from: 'shs.smarthotel@gmail.com', 
+    from: 'shs.smarthotel@gmail.com',
     to: clientEmail,
-    subject: 'SHS Check-In Successful',
+    subject: 'SHS Smart Hotel - Check-In Successful',
     html: `
-      <p>Your check-in was successful!</p>
-      <p>One-Time Password (OTP): <strong>${otp}</strong></p>
-    `,
-  };
-
+    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+        <h2 style="color: #4CAF50; text-align: center;">Welcome to SHS Smart Hotel!</h2>
+        <p>Dear Valued Guest,</p>
+        <p>We are pleased to inform you that your check-in was successful. We are delighted to have you with us and look forward to providing you with an exceptional stay.</p>
+        <p>For your convenience, here is your One-Time Password (OTP):</p>
+        <p style="font-size: 24px; font-weight: bold; color: #FF5722; text-align: center;">${otp}</p>
+        <p>This OTP is important for accessing various services during your stay. Please keep it secure.</p>
+        <p>If you need any assistance, feel free to reach out to our front desk or contact our support team at any time.</p>
+        <p>Enjoy your stay!</p>
+        <p>Best regards,</p>
+        <p style="font-weight: bold;">The SHS Smart Hotel Team</p>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;"/>
+        <p style="font-size: 12px; color: #999; text-align: center;">
+            This is an automated message. Please do not reply to this email. For assistance, contact us at <a href="mailto:shs.support@smarthotel.com">shs.support@smarthotel.com</a>.
+        </p>
+    </div>`
+};
   try {
     await transporter.sendMail(mailOptions);
     console.log('Email sent successfully');

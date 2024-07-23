@@ -119,7 +119,7 @@ app.post('/check-in', async (req, res) => {
         <p style="font-weight: bold;">The SHS Smart Hotel Team</p>
         <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;"/>
         <p style="font-size: 12px; color: #999; text-align: center;">
-            This is an automated message. Please do not reply to this email. For assistance, contact us at <a href="mailto:shs.support@smarthotel.com">shs.support@smarthotel.com</a>.
+            This is an automated message. Please do not reply to this email.</a>.
         </p>
     </div>`
 };

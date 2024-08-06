@@ -133,7 +133,7 @@ app.post('/check-in', async (req, res) => {
     html: `
     <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
         <h2 style="color: #4CAF50; text-align: center;">Welcome to SHS Smart Hotel!</h2>
-        <p>Dear Valued Guest,</p>
+        <p>Dear ${clientFirstName} ${clientLastName},</p>
         <p>We are pleased to inform you that your check-in was successful. We are delighted to have you with us and look forward to providing you with an exceptional stay.</p>
         <p>For your convenience, here is your One-Time Password (OTP):</p>
         <p style="font-size: 24px; font-weight: bold; color: #FF5722; text-align: center;">${otp}</p>

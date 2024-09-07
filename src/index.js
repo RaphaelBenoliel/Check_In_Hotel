@@ -46,7 +46,7 @@ app.post('/check-in', async (req, res) => {
     'client-phone': clientPhone,
     'check-in-date': checkInDateStr,
     'check-out-date': checkOutDateStr,
-    'card-number': cardNumber,
+    'card-number': cardNumberWithSpaces,
     'exp-month': expMonth,
     'exp-year': expYear,
     'cvc': cvc,
@@ -55,6 +55,7 @@ app.post('/check-in', async (req, res) => {
   // Convert check-in and check-out dates to Date objects
   const checkInDate = new Date(checkInDateStr);
   const checkOutDate = new Date(checkOutDateStr);
+  const cardNumber = cardNumberWithSpaces.replace(/\s/g, '');
 
   // Validate inputs
   const errors = {};
@@ -75,6 +76,7 @@ app.post('/check-in', async (req, res) => {
       errors['check-in-date'] = 'Invalid check-in date. It must be a future date.';
       errors['check-out-date'] = 'Invalid check-out date. It must be after the check-in date.';
   }
+  console.log(cardNumber);
   if (!isValidCardNumber(cardNumber)) {
       errors['card-number'] = 'Invalid card number. It must be a 16-digit number.';
   }
@@ -211,6 +213,16 @@ function isValidDate(checkInDate, checkOutDate) {
   // Check if the current date is less than or equal to the check-in date
   // and if the check-in date is less than the check-out date
   return currentDate <= checkInDate && checkInDate < checkOutDate;
+}
+
+// Add this function after the other validation functions
+function formatCreditCardNumber(input) {
+  // Remove any existing spaces
+  let value = input.value.replace(/\s+/g, '');
+  // Add a space after every 4 digits
+  value = value.replace(/(\d{4})/g, '$1 ').trim();
+  // Update the input value
+  input.value = value;
 }
 
 const __filename = new URL(import.meta.url).pathname;

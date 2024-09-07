@@ -37,7 +37,7 @@
         <input type="date" id="check-out-date" name="check-out-date" required />
       </div>
       <div class="form-group">
-        <label for="card-number">Card Number:</label>
+        <label for="card-number">Credit Card Number:</label>
         <input type="text" id="card-number" name="card-number" required />
       </div>
       <div class="form-group">
@@ -144,7 +144,6 @@
         console.error('Unexpected error format:', errors);
       }
     }
-
     // Helper function to hide the error container
     function hideErrorContainer() {
       const errorContainer = document.getElementById('error-container');
@@ -152,6 +151,35 @@
       errorList.innerHTML = ''; // Clear previous error messages
       errorContainer.style.display = 'none';
     }
+   
+    document.addEventListener('DOMContentLoaded', function() {
+  const cardNumberInput = document.getElementById('card-number');
+  
+  if (cardNumberInput) {
+    cardNumberInput.addEventListener('input', function(e) {
+      formatCreditCardNumber(this);
+    });
+
+    cardNumberInput.addEventListener('keydown', function(e) {
+      const value = this.value.replace(/\s/g, '');
+      if (value.length >= 16 && 
+          !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)) {
+        e.preventDefault();
+      }
+    });
+  }
+});
+function formatCreditCardNumber(input) {
+    // Remove any existing spaces
+    let value = input.value.replace(/\s+/g, '');
+    // Limit to 16 digits
+    value = value.slice(0, 16);
+    // Add a space after every 4 digits
+    value = value.replace(/(\d{4})/g, '$1 ').trim();
+    // Update the input value
+    input.value = value;
+  }
+
   </script>
 </body>
 </html>
